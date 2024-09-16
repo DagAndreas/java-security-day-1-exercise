@@ -1,0 +1,146 @@
+openapi: 3.1.0
+info:
+  title: Video Game API
+  description: API for managing video games and their related data.
+  version: 1.0.0
+  contact:
+    name: Video Game API Support
+
+servers:
+  - url: http://localhost:4000
+tags:
+  - name: videogames
+paths:
+  /videogames:
+    post:
+      tags:
+        - videogames
+      summary: Create a video game
+      description: Create a new video game entry.
+      operationId: createVideoGame
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateVideoGame'
+      responses:
+        '201':
+          description: Successfully created a new video game
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoGame'
+    get:
+      tags:
+        - videogames
+      summary: Get all video games
+      description: Get a list of all video games.
+      operationId: getVideoGames
+      responses:
+        '200':
+          description: Successfully returned a list of all video games
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllVideoGames'
+  /videogames/{id}:
+    put:
+      tags:
+        - videogames
+      summary: Update a video game
+      description: Update an existing video game.
+      operationId: updateVideoGame
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the video game to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateVideoGame'
+      responses:
+        '201':
+          description: Successfully updated the specified video game
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoGame'
+    delete:
+      tags:
+        - videogames
+      summary: Delete a video game
+      description: Delete an existing video game. Deleted records should be returned to the client for potential restoration.
+      operationId: deleteVideoGame
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the video game to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully deleted the specified video game
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoGame'
+
+components:
+  schemas:
+    CreateVideoGame:
+      type: object
+      required: [ title, gamestudio, ageRating, numberOfPlayers, genre ]
+      properties:
+        title:
+          type: string
+          example: "The Last of Us"
+        gamestudio:
+          type: string
+          example: "Naughty Dog"
+        ageRating:
+          type: integer
+          example: 18
+        numberOfPlayers:
+          type: integer
+          example: 1
+        genre:
+          type: string
+          example: "Action"
+    VideoGame:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: "The Last of Us"
+        gamestudio:
+          type: string
+          example: "Naughty Dog"
+        ageRating:
+          type: integer
+          example: 18
+        numberOfPlayers:
+          type: integer
+          example: 1
+        genre:
+          type: string
+          example: "Action"
+        createdAt:
+          type: string
+          format: DateTime
+          example: "2023-03-14T11:01:56.633+00:00"
+        updatedAt:
+          type: string
+          format: DateTime
+          example: "2023-03-14T11:01:56.633+00:00"
+    AllVideoGames:
+      type: array
+      items:
+        $ref: '#/components/schemas/VideoGame'
